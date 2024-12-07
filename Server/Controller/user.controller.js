@@ -1,22 +1,23 @@
 import userModel from "../Model/user.model.js";
 
-export function addUser(req, res) {
-    const { userName, email, password } = req.body;
+
+export function addUser(req, res , next ) {
+    const { channelName , username, password, about , profilePic } = req.body;
 
     const newUser = new userModel({
-        userName,
-        email,
-        password
+        channelName,
+        username,
+        password,
+        about,
+        profilePic
+    
     })
     newUser.save().then(data => {
         if (!data) {
-            req.status(404).send(json({ messege: "user not found" }));
-        }
-        else {
-            res.send(data);
+            res.status(404).send(json({ messege: "user not found" }));
         }
     }).catch(err => {
-        res.status(500).send(err || "internal server Error");
+        res.status(500).send(err);
     })
-    
+    next()
 }

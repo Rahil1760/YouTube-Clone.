@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {TbDotsVertical} from "react-icons/tb";
 import {FaRegCircleUser} from "react-icons/fa6";
 import {CiSearch} from "react-icons/ci";
+import {MdOutlineVideoCall} from "react-icons/md";
 
 export function Header({toggleFunction}) {
     const navigator = useNavigate();
@@ -34,7 +35,10 @@ export function Header({toggleFunction}) {
                     </div>
                 </div>
             </div>
-            <div className="md:flex mr-[2%] hidden">
+            <div className="w-6 h-6 mr-4 hidden md:block cursor-pointer">
+                <MdOutlineVideoCall className="text-white w-full h-auto" onClick={() => navigator("/uploadVideos")} />
+            </div>
+            <div className="md:flex mr-[2%] hidden ">
                 <div className="cursor-pointer mt-1">
                     <button>
                         <TbDotsVertical className="text-white mt-2 mr-2" />

@@ -4,6 +4,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {AllVideos} from "./Components/Aside Section/VideosSection/AllVideos.jsx";
 import {FrontPageLayOut} from "./FrontPageLayOut.jsx";
 import {SignIn} from "./Components/HeaderSection/SignUp/SignIn.jsx";
+import {UploadVideo} from "./Components/UploadVideo/UploadVideo.jsx";
 import "./index.css";
 import App from "./App.jsx";
 const app = createBrowserRouter([
@@ -29,6 +30,10 @@ const app = createBrowserRouter([
     {
         path: "/SignUp",
         element: <SignIn />,
+    },
+    {
+        path: "/uploadVideos",
+        element: <UploadVideo />,
     },
 ]);
 createRoot(document.getElementById("root")).render(

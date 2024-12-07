@@ -1,31 +1,30 @@
-import mongoose, { Schema, trusted } from "mongoose";
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    name: {
+    channelName: {
         type: String,
-        require: true
+        require : true  
     },
-    email: {
+    username:
+    {
         type: String,
-        unique : true
-        
+        required: true,
+        unique: true
     },
     password: {
         type: String,
-        require: true,
+        required: true
     },
-    subscriber: {
-        type: Number,
-        default: 0,
+    about: {
+        type: String,
+        require : true   
     },
-    subscribedUsers: {
-        type: [String]
+    profilePic: {
+        type: String,
+        require : true
     }
+}, {timestamps : true},);
 
-
-
-}, { Timestamp: true });
-
-const userModel = mongoose.model("User", userSchema);
+const userModel = mongoose.model('User', userSchema);
 
 export default userModel;

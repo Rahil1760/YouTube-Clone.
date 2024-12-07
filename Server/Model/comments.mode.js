@@ -1,16 +1,23 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+import { Schema } from "mongoose";
 
-const commentSchema = new mongoose.Schema({
-    userId: {
+const commentSchema = new Schema({
+    content: {
         type: String,
-        required: true,
-        unique : true
+        required: true
     },
-    videoId: {
-        type : String,
-    }
-    
-    
-}, { Timestamp: true });
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    video: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Video',
+        required: true
+    } 
+}, {timestamps : true});
 
-export default mongoose.model("videos", commentSchema);
+const commentModel = mongoose.model('Comment', commentSchema);
+
+export default commentModel;

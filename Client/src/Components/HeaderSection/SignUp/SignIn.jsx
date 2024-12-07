@@ -1,9 +1,8 @@
 import React from "react";
 import {useState} from "react";
-import {Eye, EyeOff, Youtube} from "lucide-react";
+import {Eye, EyeOff} from "lucide-react";
 import {Link, useNavigate} from "react-router-dom";
 import {Button} from "@mui/material";
-//import axios from "axios";
 //import {useDispatch} from "react-redux";
 //import {setUser} from "@/redux/userSlice";
 
@@ -11,37 +10,38 @@ export const SignIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const navigator = useNavigate();
     // const [error, setError] = useState("");
     // const [loading, setLoading] = useState(false);
     // const navigate = useNavigate();
     // const dispatch = useDispatch();
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         setLoading(true); // Set loading to true
-    //         setError(""); // Clear any previous errors
-    //         const response = await axios.post(
-    //             "https://youtube-backend-eight.vercel.app/api/user/signin",
-    //             {
-    //                 email,
-    //                 password,
-    //             },
-    //             {withCredentials: true}
-    //         );
-    //         if (response.data.success) {
-    //             dispatch(setUser(response.data.user)); // Set user in redux
-    //             navigate("/"); // Navigate to home page
-    //         } else {
-    //             setError(response.data.message);
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //         setError(error.response?.data?.message || "Something went wrong");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
+    const handleSubmit = (e) => {
+        const result = fetch("http://localhost:5100/api/signUp", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({username: email, password: password}),
+        });
+        result
+        .then((data) => data.json())
+        .then((data) => {
+            if (data.messege) {
+                alert("User exist");
+            } else if (!data.token) {
+                return;
+            } else {
+                localStorage.setItem("youtubeToken", data.token);
+            }
+        })
+        .catch((erro) => {
+            console.log(erro);
+        });
+        e.preventDefault();
+        navigator("/");
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center">
@@ -55,7 +55,7 @@ export const SignIn = () => {
                     {/* <Youtube className="w-8 h-8 text-primary" /> */}
                 </div>
                 <h2 className="text-2xl font-bold mb-6 text-center text-foreground">Sign in</h2>
-                <form>
+                <form onSubmit={(e) => handleSubmit(e)}>
                     <div className="mb-4">
                         <label
                             htmlFor="email"
