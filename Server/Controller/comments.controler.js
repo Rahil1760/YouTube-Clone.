@@ -3,8 +3,8 @@ import userModel from "../Model/user.model.js";
 import videoModel from "../Model/video.model.js";
 export const addingComments = async (req, res) => {
     try {
-        const { content } = req.body;
-        const video = req.params.id
+    const { content } = req.body;
+    const video = req.params.id
     const userId = req.user;
     const userDetails = await userModel.findOne({ username: userId })
     const user = userDetails._id 

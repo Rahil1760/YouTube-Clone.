@@ -6,6 +6,7 @@ import {CiSearch} from "react-icons/ci";
 import {MdOutlineVideoCall} from "react-icons/md";
 
 export function Header({toggleFunction}) {
+    const loginUser = localStorage.getItem("youtubeToken");
     const navigator = useNavigate();
     return (
         <div className="flex bg-black items-center h-12 z-10">
@@ -19,7 +20,7 @@ export function Header({toggleFunction}) {
                 <img
                     src={"/Yotube.png"}
                     className="h-[120px] w-[120px] cursor-pointer"
-                    onClick={() => navigator("/")}
+                    onClick={() => navigator("/Home")}
                 />
             </div>
             <div className="w-1/2 m-auto">
@@ -45,11 +46,11 @@ export function Header({toggleFunction}) {
                     </button>
                 </div>
                 <div
-                    className="bg-black border-2 border-slate-600 rounded-full pt-1 pb-1 pl-2 pr-2 text-slate-300 flex items-center w-24 justify-between cursor-pointer"
+                    className="bg-black border-2 border-slate-600 rounded-full pt-1 pb-1 pl-2 pr-2 text-slate-300 flex items-center w-26 justify-between cursor-pointer"
                     onClick={() => navigator("/SignUp")}
                 >
                     <FaRegCircleUser />
-                    <button className="mb-1 font-semibold">Sign in</button>
+                    <button className="mb-1 font-semibold">{loginUser ? "Sign Out" : "Sign in"}</button>
                 </div>
             </div>
         </div>

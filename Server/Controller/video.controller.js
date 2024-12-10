@@ -39,12 +39,14 @@ export const AddVideos = async (req, res) => {
 
 
 export const getAllVideo = async (req, res) => {
+    
     try {
+        console.log("block")
         // Populate the correct field name
         const allVideos = await videoModel.find().populate('userId');
         
         // Respond with the populated videos
-        res.status(201).json({ status: 201, videos: allVideos });
+        res.send(allVideos)
     } catch (err) {
         res.status(500).json({ message: "Internal server error", error: err.message });
     }

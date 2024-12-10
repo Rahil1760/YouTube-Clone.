@@ -4,7 +4,7 @@ import { permissionGranted } from "../Controller/userAuth.controler.js";
 import { getVideoById } from "../Controller/video.controller.js";
 import { getVideoByUser } from "../Controller/video.controller.js";
 export const videoRoutes = (app) => {
-    app.get("/api/getAllVideo",permissionGranted, getAllVideo);
+    app.get("/api/getAllVideo", getAllVideo);
     app.post("/api/addnewvideo", permissionGranted, AddVideos);
     app.get("/api/getVideoById/:id", getVideoById);
     app.get("/api/getChannelVideos/:userId" , getVideoByUser)

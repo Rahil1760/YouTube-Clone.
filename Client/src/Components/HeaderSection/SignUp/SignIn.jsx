@@ -1,20 +1,20 @@
 import React from "react";
 import {useState} from "react";
-import {Eye, EyeOff} from "lucide-react";
+import {Cookie, Eye, EyeOff} from "lucide-react";
 import {Link, useNavigate} from "react-router-dom";
 import {Button} from "@mui/material";
 //import {useDispatch} from "react-redux";
 //import {setUser} from "@/redux/userSlice";
 
 export const SignIn = () => {
-    const [email, setEmail] = useState("");
+    const [username, setusername] = useState("");
+    const [channelName, setChannelName] = useState("");
     const [password, setPassword] = useState("");
+    const [profilePic, setprofilePic] = useState("");
+    const [about, setabout] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+
     const navigator = useNavigate();
-    // const [error, setError] = useState("");
-    // const [loading, setLoading] = useState(false);
-    // const navigate = useNavigate();
-    // const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
         const result = fetch("http://localhost:5100/api/signUp", {
@@ -23,24 +23,30 @@ export const SignIn = () => {
                 Accept: "application/json",
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({username: email, password: password}),
+            body: JSON.stringify({
+                username: username,
+                password: password,
+                profilePic: profilePic,
+                about: about,
+                channelName: channelName,
+            }),
         });
         result
         .then((data) => data.json())
         .then((data) => {
-            if (data.messege) {
-                alert("User exist");
+            if (data.message) {
+                alert(`${data.message} Channel name already exist , please restart server beofre trying again`);
             } else if (!data.token) {
                 return;
             } else {
                 localStorage.setItem("youtubeToken", data.token);
+                navigator("/");
             }
         })
         .catch((erro) => {
             console.log(erro);
         });
         e.preventDefault();
-        navigator("/");
     };
 
     return (
@@ -56,6 +62,25 @@ export const SignIn = () => {
                 </div>
                 <h2 className="text-2xl font-bold mb-6 text-center text-foreground">Sign in</h2>
                 <form onSubmit={(e) => handleSubmit(e)}>
+                    {/* channelName */}
+                    <div className="mb-6 relative">
+                        <label
+                            htmlFor="channelName"
+                            className="block text-sm font-medium text-foreground mb-1 text-slate-400"
+                        >
+                            Channel Name
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                id="channelName"
+                                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-input text-foreground pr-10"
+                                onChange={(e) => setChannelName(e.target.value)}
+                                required
+                            />
+                        </div>
+                    </div>
+                    {/* username */}
                     <div className="mb-4">
                         <label
                             htmlFor="email"
@@ -67,11 +92,11 @@ export const SignIn = () => {
                             type="email"
                             id="email"
                             className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-input text-foreground"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => setusername(e.target.value)}
                             required
                         />
                     </div>
+                    {/* Password */}
                     <div className="mb-6 relative">
                         <label
                             htmlFor="password"
@@ -97,13 +122,50 @@ export const SignIn = () => {
                             </button>
                         </div>
                     </div>
+                    {/* about */}
+                    <div className="mb-6 relative">
+                        <label
+                            htmlFor="about"
+                            className="block text-sm font-medium text-foreground mb-1 text-slate-400"
+                        >
+                            About
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                id="about"
+                                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-input text-foreground pr-10"
+                                onChange={(e) => setabout(e.target.value)}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    {/* profie Pic */}
+                    <div className="mb-6 relative">
+                        <label
+                            htmlFor="profilePic"
+                            className="block text-sm font-medium text-foreground mb-1 text-slate-400"
+                        >
+                            Profile Pic
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="file"
+                                accept=""
+                                id="profilePic"
+                                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-input text-foreground pr-10"
+                                onChange={(e) => setprofilePic(e.target.value)}
+                            />
+                        </div>
+                    </div>
                     <Button
                         variant="outlined"
                         size="small"
                         type="submit"
                         className="w-full  py-2 px-4 rounded-md  transition duration-300"
                     >
-                        Sign in {/* {loading ? "Loading..." : "Sign In"} */}
+                        Sign in
                     </Button>
 
                     {/* {error && <p className="text-red-500 text-center">{error}</p>} */}

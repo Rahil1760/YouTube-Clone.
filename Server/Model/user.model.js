@@ -3,13 +3,14 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     channelName: {
         type: String,
-        require : true  
+        require: true,
+        unique : true
     },
     username:
     {
         type: String,
         required: true,
-        unique: true
+        unique : true
     },
     password: {
         type: String,
@@ -21,7 +22,7 @@ const userSchema = new mongoose.Schema({
     },
     profilePic: {
         type: String,
-        require : true
+        default : "https://asset.cloudinary.com/dwbdkd28k/74332d9c211a0945c38ee54bec746172"
     }
 }, {timestamps : true},);
 

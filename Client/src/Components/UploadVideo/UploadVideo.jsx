@@ -1,36 +1,49 @@
 import React from "react";
-import {Button} from "@mui/material";
 import {useState} from "react";
-import {Files} from "lucide-react";
+import {Eye, EyeOff} from "lucide-react";
+import {Link, useNavigate} from "react-router-dom";
+import {Button} from "@mui/material";
 export const UploadVideo = () => {
-    const [file, setfile] = useState({});
-    // const [string, setString] = useState({});
-    const [videoDetails, setVideoDetails] = useState({});
-    function fileExtraction(e) {
-        setfile({
-            ...file,
-            [e.target.name]: e.target.file[0],
+    const [description, setdescription] = useState("");
+    const [title, settitle] = useState("");
+    const [videoLink, setvideoLink] = useState("");
+    const [profilePic, setprofilePic] = useState("");
+    const [thumbnail, setthumbnail] = useState("");
+    const [showvideoLink, setShowvideoLink] = useState(false);
+
+    const navigator = useNavigate();
+
+    const handleSubmit = (e) => {
+        const accessToken = localStorage.getItem("youtubeToken");
+        const result = fetch("http://localhost:5100/api/addnewvideo", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `JWT ${accessToken}`,
+            },
+            body: JSON.stringify({
+                description: description,
+                videoLink: videoLink,
+                profilePic: profilePic,
+                thumbnail: thumbnail,
+                title: title,
+            }),
         });
-    }
-    // function stringExtraction(e) {
-    //     setString({
-    //         ...string,
-    //         [e.target.name]: e.target.value,
-    //     });
-    // }
-
-    function showDetails(e) {
+        result
+        .then((data) => data.json())
+        .then((data) => {
+            navigator("/Home");
+        })
+        .catch((erro) => {
+            console.log(erro);
+        });
         e.preventDefault();
-        setVideoDetails({...string, ...file});
-        console.log(videoDetails);
+    };
 
-        const data = new FormData();
-        data.append("image", file);
-        console.log("FD OBJECT", data);
-    }
     return (
         <div className="min-h-screen flex items-center justify-center">
-            <div className="p-8 rounded-lg shadow-md border border-border w-full max-w-md bg-black">
+            <div className="bg-card p-8 rounded-lg shadow-md border border-border w-full max-w-md bg-black">
                 <div className="flex justify-center items-center mb-6">
                     <img
                         src={"/Yotube.png"}
@@ -40,23 +53,26 @@ export const UploadVideo = () => {
                     {/* <Youtube className="w-8 h-8 text-primary" /> */}
                 </div>
                 <h2 className="text-2xl font-bold mb-6 text-center text-foreground">Sign in</h2>
-                <form onSubmit={(e) => showDetails(e)}>
-                    {/* <div className="mb-4">
+                <form onSubmit={(e) => handleSubmit(e)}>
+                    {/* title */}
+                    <div className="mb-6 relative">
                         <label
-                            htmlFor="Title"
+                            htmlFor="title"
                             className="block text-sm font-medium text-foreground mb-1 text-slate-400"
                         >
                             Title
                         </label>
-                        <input
-                            name="videoTitle"
-                            type="text"
-                            id="Title"
-                            className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-input text-foreground bg-gray-400"
-                            onChange={(e) => stringExtraction(e)}
-                            required
-                        />
+                        <div className="relative">
+                            <input
+                                type="text"
+                                id="title"
+                                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-input text-foreground pr-10"
+                                onChange={(e) => settitle(e.target.value)}
+                                required
+                            />
+                        </div>
                     </div>
+                    {/* description */}
                     <div className="mb-4">
                         <label
                             htmlFor="description"
@@ -65,52 +81,52 @@ export const UploadVideo = () => {
                             Description
                         </label>
                         <input
-                            name="videoDescription"
-                            type="text"
                             id="description"
-                            className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-input text-foreground bg-gray-400"
-                            onChange={(e) => stringExtraction(e)}
-                            required
-                        />
-                    </div> */}
-                    {/* <div className="mb-4">
-                        <label
-                            htmlFor="video"
-                            className="block text-sm font-medium text-foreground mb-1 text-slate-400"
-                        >
-                            Video
-                        </label>
-                        <input
-                            name="Video"
-                            type="file"
-                            accept="video/*"
-                            id="video"
                             className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-input text-foreground"
-                            onChange={(e) => fileExtraction(e)}
+                            onChange={(e) => setdescription(e.target.value)}
                             required
                         />
-                    </div> */}
+                    </div>
+                    {/* videoLink */}
                     <div className="mb-6 relative">
                         <label
-                            htmlFor="Thumbnail"
+                            htmlFor="videoLink"
                             className="block text-sm font-medium text-foreground mb-1 text-slate-400"
                         >
-                            Thumbnail
+                            videoLink
                         </label>
                         <div className="relative">
                             <input
-                                type="file"
-                                name="imgUrl"
-                                accept="image/*"
-                                id="Thumbnail"
+                                id="videoLink"
                                 className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-input text-foreground pr-10"
-                                onChange={(e) => fileExtraction(e)}
+                                onChange={(e) => setvideoLink(e.target.value)}
                                 required
                             />
                             <button
                                 type="button"
                                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-foreground"
-                            ></button>
+                                onClick={() => setShowvideoLink(!showvideoLink)}
+                            >
+                                {showvideoLink ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                            </button>
+                        </div>
+                    </div>
+                    {/* thumbnail */}
+                    <div className="mb-6 relative">
+                        <label
+                            htmlFor="thumbnail"
+                            className="block text-sm font-medium text-foreground mb-1 text-slate-400"
+                        >
+                            thumbnail
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                id="thumbnail"
+                                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-input text-foreground pr-10"
+                                onChange={(e) => setthumbnail(e.target.value)}
+                                required
+                            />
                         </div>
                     </div>
                     <Button
@@ -121,14 +137,23 @@ export const UploadVideo = () => {
                     >
                         Upload {/* {loading ? "Loading..." : "Sign In"} */}
                     </Button>
+
+                    {/* {error && <p className="text-red-500 text-center">{error}</p>} */}
                 </form>
                 <div className="mt-4 text-center">
                     <a href="#" className="text-primary hover:underline">
-                        Forgot password?
+                        Forgot videoLink?
                     </a>
                 </div>
+                <div className="mt-6 text-center">
+                    <p className="text-foreground">
+                        Don't have an account?{" "}
+                        <Link to="/sign-up" className="text-primary hover:underline">
+                            Sign up
+                        </Link>
+                    </p>
+                </div>
             </div>
-            <div className="w-[200px] h-[200px]">{videoDetails.imgUrl && <img src={videoDetails.imgUrl} />}</div>
         </div>
     );
 };
